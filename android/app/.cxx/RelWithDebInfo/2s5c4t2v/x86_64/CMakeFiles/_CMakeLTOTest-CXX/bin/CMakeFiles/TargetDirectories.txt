@@ -1,0 +1,4 @@
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/edit_cache.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86_64/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/rebuild_cache.dir

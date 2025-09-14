@@ -1,0 +1,1 @@
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/build/intermediates/cxx/RelWithDebInfo/2s5c4t2v/obj/x86_64

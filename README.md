@@ -1,97 +1,182 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🔒 SafeVault - Secure Crypto Wallet App
 
-# Getting Started
+A professional, secure, and user-friendly cryptocurrency wallet application built with React Native.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## ✨ Features
 
-## Step 1: Start Metro
+### 🔐 **Security First**
+- **End-to-end encryption** for all sensitive data
+- **Secure storage** with encrypted local database
+- **Biometric authentication** support
+- **Account lockout** protection against brute force attacks
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### 💰 **Crypto Management**
+- **USDT deposits** with proof upload to AWS S3
+- **Multi-platform withdrawals** (Binance, Trust Wallet)
+- **Real-time balance tracking** with deposit, profit, and total
+- **Automatic profit calculation** (1% daily as configured)
+- **Transaction history** organized by type
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### 🎨 **Professional UI/UX**
+- **Dark theme** with neon green, purple, and blue accents
+- **Smooth animations** throughout the app
+- **Responsive design** for all screen sizes
+- **Real-time notifications** with auto-dismiss
+- **Loading states** and comprehensive error handling
 
-```sh
-# Using npm
-npm start
+### 🚀 **Advanced Features**
+- **Redux state management** for scalable architecture
+- **AWS S3 integration** for secure file storage
+- **Form validation** with real-time feedback
+- **TypeScript** for type safety
+- **Performance optimization** with memory management
+- **Comprehensive testing** with unit tests
 
-# OR using Yarn
-yarn start
+## 📱 **Screens**
+
+1. **Splash Screen** - Animated logo with SafeVault branding
+2. **Authentication** - Login and Register with validation
+3. **Profile** - User management and settings
+4. **Deposit** - USDT wallet with image upload
+5. **Withdraw** - Multi-platform withdrawal system
+6. **Wallet** - Balance display and transaction history
+
+## 🛠 **Tech Stack**
+
+- **React Native** 0.81.1
+- **TypeScript** for type safety
+- **Redux Toolkit** for state management
+- **React Navigation** for navigation
+- **AWS SDK** for file storage
+- **React Native Image Picker** for image handling
+- **React Native Vector Icons** for icons
+
+## 🚀 **Getting Started**
+
+### Prerequisites
+- Node.js (>= 20)
+- React Native CLI
+- Xcode (for iOS)
+- Android Studio (for Android)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd SafeVault
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **iOS Setup**
+   ```bash
+   cd ios && pod install && cd ..
+   ```
+
+4. **Run the app**
+   ```bash
+   # iOS
+   npm run ios
+   
+   # Android
+   npm run android
+   ```
+
+## ⚙️ **Configuration**
+
+### AWS S3 Setup
+1. Create an AWS S3 bucket
+2. Update `src/config/aws.ts` with your credentials
+3. Configure IAM permissions for S3 access
+
+### Environment Variables
+Create a `.env` file with:
+```
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+S3_BUCKET_NAME=your_bucket_name
 ```
 
-## Step 2: Build and run your app
+## 🧪 **Testing**
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+```bash
+# Run tests
+npm test
 
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+# Run tests with coverage
+npm run test:coverage
 ```
+
+## 📦 **Build**
 
 ### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+```bash
+# Development build
 npm run ios
 
-# OR using Yarn
-yarn ios
+# Production build
+cd ios && xcodebuild -workspace SafeVault.xcworkspace -scheme SafeVault -configuration Release
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Android
+```bash
+# Development build
+npm run android
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+# Production build
+cd android && ./gradlew assembleRelease
+```
 
-## Step 3: Modify your app
+## 🔒 **Security Features**
 
-Now that you have successfully run the app, let's make changes!
+- **Data Encryption**: All sensitive data is encrypted using AES-256
+- **Secure Storage**: Uses encrypted AsyncStorage for local data
+- **Input Validation**: Comprehensive validation and sanitization
+- **API Security**: Secure headers and request validation
+- **Account Protection**: Login attempt limiting and lockout
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## 📊 **Performance**
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+- **Memory Management**: Automatic garbage collection
+- **Image Optimization**: Lazy loading and caching
+- **Network Optimization**: Request caching and batching
+- **Bundle Optimization**: Code splitting and lazy loading
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## 🎯 **Architecture**
 
-## Congratulations! :tada:
+```
+src/
+├── components/          # Reusable UI components
+├── screens/            # App screens
+├── navigation/         # Navigation configuration
+├── store/             # Redux store and slices
+├── hooks/             # Custom React hooks
+├── utils/             # Utility functions
+├── services/          # External service integrations
+├── theme/             # Design system and theming
+└── __tests__/         # Test files
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+## 📝 **License**
 
-### Now what?
+This project is licensed under the MIT License.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## 🤝 **Contributing**
 
-# Troubleshooting
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## 📞 **Support**
 
-# Learn More
+For support and questions, please contact the development team.
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+**SafeVault** - Your secure gateway to the crypto world 🔒✨

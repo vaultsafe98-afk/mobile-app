@@ -1,0 +1,189 @@
+📱 Mobile App Requirement Document
+Project Title: Crypto Wallet App
+ Platform: React Native (iOS & Android)
+ Theme: Dark theme, crypto-style, neon highlights
+
+1. App Navigation Structure
+Main bottom navigation tabs:
+Profile
+
+
+Deposit
+
+
+Withdraw
+
+
+Wallet (Transactions & Balance)
+
+
+
+2. Screens & Features
+2.1 Onboarding & Authentication
+a. Splash Screen
+App logo, dark theme
+
+
+Redirects to Login/Register
+
+
+b. Register Screen
+Fields:
+
+
+Profile Image (upload)
+
+
+First Name
+
+
+Last Name
+
+
+Email
+
+
+Password
+
+
+Button: Register
+
+
+On success → auto-login or redirect to Login
+
+
+c. Login Screen
+Fields: Email, Password
+
+
+Button: Login
+
+
+Forgot Password (optional later)
+
+
+
+2.2 Profile Screen
+Display user info:
+
+
+Profile image
+
+
+Full name
+
+
+Email
+
+
+Button: Edit Profile (change name, profile image, password)
+
+
+Logout button
+
+
+
+2.3 Deposit Screen
+Instructions: Show USDT wallet address (static account number provided by admin).
+
+
+Field: Upload Screenshot (proof of transfer, stored in AWS S3).
+
+
+Button: Submit Deposit Request.
+
+
+Status: Pending → Approved/Rejected (admin action).
+
+
+
+2.4 Withdraw Screen
+Fields:
+
+
+Amount
+
+
+Platform (Dropdown: Binance / Trust Wallet)
+
+
+Wallet Address (account number)
+
+
+Button: Submit Withdrawal Request.
+
+
+Status tracker: Pending → Approved/Rejected.
+
+
+
+2.5 Wallet Screen
+Show three balances:
+
+
+Deposit Amount
+
+
+Profit Amount (1% daily)
+
+
+Total Balance (Deposit + Profit)
+
+
+Transaction History Tabs:
+
+
+Deposits → List of deposits with date, amount, status
+
+
+Withdrawals → List of withdrawals with date, amount, status
+
+
+Profits → Daily profit logs with date and amount
+
+
+
+2.6 Notifications (In-App)
+List of notifications (latest on top):
+
+
+Deposit approved/rejected
+
+
+Withdrawal approved/rejected
+
+
+Daily profit credited
+
+
+
+3. UI/UX Guidelines
+Dark mode only (black/grey backgrounds).
+
+
+Neon green, purple, or blue accents.
+
+
+Rounded cards, glowing buttons, and futuristic icons.
+
+
+Smooth animations for navigation.
+
+
+
+4. Non-Functional Requirements (App Specific)
+Support both iOS & Android.
+
+
+Responsive design for all screen sizes.
+
+
+Offline mode not required.
+
+
+Secure image upload to AWS S3.
+
+
+
+
+
