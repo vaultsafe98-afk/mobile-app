@@ -29,7 +29,7 @@ export const getApiConfig = () => {
   // In production, use your deployed backend URL
   return {
     ...API_CONFIG,
-    BASE_URL: 'https://your-backend-domain.com/api',
+    BASE_URL: 'https://backend-5f5u.onrender.com/api',
   };
 };
 
