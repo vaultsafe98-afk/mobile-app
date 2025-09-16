@@ -1,8 +1,9 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useAppSelector } from '../hooks/redux';
 
 // Import screens
@@ -16,6 +17,7 @@ import NotificationsScreen from '../screens/NotificationsScreen';
 import DepositScreen from '../screens/DepositScreen';
 import WithdrawScreen from '../screens/WithdrawScreen';
 import WalletScreen from '../screens/WalletScreen';
+import AboutScreen from '../screens/AboutScreen';
 import NotificationBanner from '../components/NotificationBanner';
 
 const Tab = createBottomTabNavigator();
@@ -37,26 +39,41 @@ function MainTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName: string;
+          let iconComponent;
 
           switch (route.name) {
             case 'Profile':
-              iconName = 'person';
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>👤</Text>
+              );
               break;
             case 'Deposit':
-              iconName = 'add-circle';
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>💰</Text>
+              );
               break;
             case 'Withdraw':
-              iconName = 'remove-circle';
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>💸</Text>
+              );
               break;
             case 'Wallet':
-              iconName = 'account-balance-wallet';
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>💼</Text>
+              );
+              break;
+            case 'Discover':
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>✨</Text>
+              );
               break;
             default:
-              iconName = 'help';
+              iconComponent = (
+                <Text style={{ fontSize: size, color, textAlign: 'center' }}>❓</Text>
+              );
           }
 
-          return <Icon name={iconName} size={size} color={color} />;
+          return iconComponent;
         },
         tabBarActiveTintColor: '#00ff88', // Neon green
         tabBarInactiveTintColor: '#666',
@@ -70,10 +87,17 @@ function MainTabs() {
         headerTintColor: '#fff',
       })}
     >
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Deposit" component={DepositScreen} />
-      <Tab.Screen name="Withdraw" component={WithdrawScreen} />
       <Tab.Screen name="Wallet" component={WalletScreen} />
+      <Tab.Screen name="Deposit" component={DepositScreen} />
+      <Tab.Screen 
+        name="Discover" 
+        component={AboutScreen}
+        options={{
+          title: 'Discover SafeVault',
+        }}
+      />
+      <Tab.Screen name="Withdraw" component={WithdrawScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

@@ -8,6 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { theme } from '../theme';
+import SafeVaultLogo from '../components/SafeVaultLogo';
 
 const { width, height } = Dimensions.get('window');
 
@@ -79,9 +80,7 @@ export default function SplashScreen() {
             },
           ]}
         >
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>🔒</Text>
-          </View>
+          <SafeVaultLogo size="large" showText={false} />
         </Animated.View>
         
         {/* App Name */}
@@ -128,21 +127,6 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 20,
     elevation: 10,
-  },
-  logo: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: theme.colors.neon.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: theme.colors.neon.purple,
-  },
-  logoText: {
-    fontSize: theme.typography.fontSize['5xl'],
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.background.primary,
   },
   appName: {
     fontSize: theme.typography.fontSize['4xl'],

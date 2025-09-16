@@ -1,5 +1,6 @@
 {
   "buildFiles": [
+    "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
@@ -9,14 +10,14 @@
   ],
   "cleanCommandsComponents": [
     [
-      "/opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/ninja",
+      "/Users/atta/Library/Android/sdk/cmake/3.22.1/bin/ninja",
       "-C",
       "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
-    "/opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/ninja",
+    "/Users/atta/Library/Android/sdk/cmake/3.22.1/bin/ninja",
     "-C",
     "/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/x86",
     "{LIST_OF_TARGETS_TO_BUILD}"
@@ -68,6 +69,11 @@
         "/Users/atta/.gradle/caches/8.14.3/transforms/009c8e3cd11ecd91209f05cf52744cb5/transformed/react-android-0.81.1-release/prefab/modules/jsi/libs/android.x86/libjsi.so",
         "/Users/atta/.gradle/caches/8.14.3/transforms/009c8e3cd11ecd91209f05cf52744cb5/transformed/react-android-0.81.1-release/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
       ]
+    },
+    "react_codegen_rnasyncstorage::@1596841e19ec5b9eeffe": {
+      "artifactName": "react_codegen_rnasyncstorage",
+      "abi": "x86",
+      "runtimeFiles": []
     }
   }
 }

@@ -18,15 +18,7 @@ export const API_CONFIG = {
 
 // Environment-specific configurations
 export const getApiConfig = () => {
-  // In development, you might want to use a different URL
-  if (__DEV__) {
-    return {
-      ...API_CONFIG,
-      BASE_URL: 'http://localhost:3000/api',
-    };
-  }
-  
-  // In production, use your deployed backend URL
+  // Use deployed backend for both development and production
   return {
     ...API_CONFIG,
     BASE_URL: 'https://backend-5f5u.onrender.com/api',

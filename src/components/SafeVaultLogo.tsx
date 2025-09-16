@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { theme } from '../theme';
 
 interface SafeVaultLogoProps {
   size?: 'small' | 'medium' | 'large';
   showText?: boolean;
+  style?: any;
 }
 
-export default function SafeVaultLogo({ size = 'medium', showText = true }: SafeVaultLogoProps) {
+export default function SafeVaultLogo({ size = 'medium', showText = true, style }: SafeVaultLogoProps) {
   const getSizeStyles = () => {
     switch (size) {
       case 'small':
@@ -34,7 +35,7 @@ export default function SafeVaultLogo({ size = 'medium', showText = true }: Safe
   const { containerSize, iconSize, textSize } = getSizeStyles();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View
         style={[
           styles.logoContainer,
@@ -45,16 +46,18 @@ export default function SafeVaultLogo({ size = 'medium', showText = true }: Safe
           },
         ]}
       >
-        <Text
+        <Image
+          source={require('../../safevault-logo.jpeg')}
           style={[
-            styles.logoIcon,
+            styles.logoImage,
             {
-              fontSize: iconSize,
+              width: containerSize - 6, // Account for border
+              height: containerSize - 6,
+              borderRadius: (containerSize - 6) / 2,
             },
           ]}
-        >
-          🔒
-        </Text>
+          resizeMode="cover"
+        />
       </View>
       {showText && (
         <Text
@@ -78,7 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    backgroundColor: theme.colors.neon.green,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
@@ -91,9 +93,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+    backgroundColor: theme.colors.background.card,
   },
-  logoIcon: {
-    color: theme.colors.background.primary,
+  logoImage: {
+    borderWidth: 0,
   },
   logoText: {
     fontWeight: theme.typography.fontWeight.bold,

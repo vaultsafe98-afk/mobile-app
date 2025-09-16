@@ -1,6 +1,9 @@
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/CMakeFiles/appmodules.dir
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/CMakeFiles/edit_cache.dir
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/edit_cache.dir
+/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/rebuild_cache.dir
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rngesturehandler_codegen_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rngesturehandler_codegen_autolinked_build/CMakeFiles/rebuild_cache.dir

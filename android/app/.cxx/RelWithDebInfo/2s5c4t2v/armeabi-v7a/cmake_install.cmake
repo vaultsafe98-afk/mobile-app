@@ -39,11 +39,12 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/opt/homebrew/share/android-commandlinetools/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-objdump")
+  set(CMAKE_OBJDUMP "/Users/atta/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-objdump")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
+  include("/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rnasyncstorage_autolinked_build/cmake_install.cmake")
   include("/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/rngesturehandler_codegen_autolinked_build/cmake_install.cmake")
   include("/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/RNImagePickerSpec_autolinked_build/cmake_install.cmake")
   include("/Users/atta/Documents/Projects/Personal/mobile-app-project/MobileApp/android/app/.cxx/RelWithDebInfo/2s5c4t2v/armeabi-v7a/safeareacontext_autolinked_build/cmake_install.cmake")

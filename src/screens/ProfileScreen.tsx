@@ -14,6 +14,7 @@ import type { NavigationProp } from '@react-navigation/native';
 import { theme } from '../theme';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logoutUser, verifyToken } from '../store/slices/authSlice';
+import SafeVaultLogo from '../components/SafeVaultLogo';
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -47,13 +48,6 @@ export default function ProfileScreen() {
     navigation.navigate('Notifications');
   };
 
-  const handleAboutSafeVault = () => {
-    Alert.alert(
-      'About SafeVault',
-      'SafeVault v1.0.0\n\nA secure crypto wallet application for managing your digital assets with advanced security features and real-time profit calculations.\n\nFeatures:\n• Secure wallet management\n• Real-time profit tracking\n• Transaction history\n• Admin panel integration\n\n© 2024 SafeVault. All rights reserved.',
-      [{ text: 'OK' }]
-    );
-  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -88,6 +82,7 @@ export default function ProfileScreen() {
       <View style={styles.content}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
+          <SafeVaultLogo size="small" showText={false} style={styles.headerLogo} />
           <View style={styles.profileImageContainer}>
             {user?.profileImage ? (
               <Image source={{ uri: user.profileImage }} style={styles.profileImage} />
@@ -141,16 +136,6 @@ export default function ProfileScreen() {
             <Text style={styles.actionArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton} onPress={handleAboutSafeVault}>
-            <View style={styles.actionIcon}>
-              <Text style={styles.actionIconText}>ℹ️</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>About SafeVault</Text>
-              <Text style={styles.actionSubtitle}>App version and information</Text>
-            </View>
-            <Text style={styles.actionArrow}>›</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Logout Button */}
@@ -173,6 +158,9 @@ const styles = StyleSheet.create({
   profileHeader: {
     alignItems: 'center',
     marginBottom: theme.spacing['3xl'],
+  },
+  headerLogo: {
+    marginBottom: theme.spacing.md,
   },
   profileImageContainer: {
     marginBottom: theme.spacing.lg,

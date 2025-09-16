@@ -14,6 +14,7 @@ import {
 import { theme } from '../../theme';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { registerUser, clearError } from '../../store/slices/authSlice';
+import SafeVaultLogo from '../../components/SafeVaultLogo';
 
 export default function RegisterScreen({ navigation }: any) {
   const dispatch = useAppDispatch();
@@ -75,6 +76,7 @@ export default function RegisterScreen({ navigation }: any) {
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
+            <SafeVaultLogo size="medium" showText={false} style={styles.logo} />
             <Text style={styles.title}>Join SafeVault</Text>
             <Text style={styles.subtitle}>Create your secure crypto account</Text>
           </View>
@@ -195,6 +197,9 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: theme.spacing.xl,
+  },
+  logo: {
+    marginBottom: theme.spacing.md,
   },
   title: {
     fontSize: theme.typography.fontSize['4xl'],

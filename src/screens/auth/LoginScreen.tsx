@@ -13,6 +13,7 @@ import {
 import { theme } from '../../theme';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { loginUser, clearError } from '../../store/slices/authSlice';
+import SafeVaultLogo from '../../components/SafeVaultLogo';
 
 export default function LoginScreen({ navigation }: any) {
   const dispatch = useAppDispatch();
@@ -30,8 +31,8 @@ export default function LoginScreen({ navigation }: any) {
       const result = await dispatch(loginUser({ email, password }));
       
       if (loginUser.fulfilled.match(result)) {
-        Alert.alert('Success', 'Login successful!');
         // Navigation will be handled by the app's authentication flow
+        // No need to show success alert, user will see they're logged in
       } else if (loginUser.rejected.match(result)) {
         Alert.alert('Error', result.payload as string);
       }
@@ -53,6 +54,7 @@ export default function LoginScreen({ navigation }: any) {
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
+            <SafeVaultLogo size="large" showText={false} style={styles.logo} />
             <Text style={styles.title}>Welcome to SafeVault</Text>
             <Text style={styles.subtitle}>Sign in to your secure account</Text>
           </View>
@@ -129,6 +131,9 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: theme.spacing['3xl'],
+  },
+  logo: {
+    marginBottom: theme.spacing.lg,
   },
   title: {
     fontSize: theme.typography.fontSize['4xl'],
