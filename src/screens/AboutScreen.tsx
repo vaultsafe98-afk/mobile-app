@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -30,12 +30,11 @@ interface FeatureProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, icon, delay = 0 }) => {
-  const fadeAnim = new Animated.Value(0);
-  const slideAnim = new Animated.Value(30);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.delay(delay),
+    const timer = setTimeout(() => {
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -47,9 +46,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, icon, delay
           duration: 800,
           useNativeDriver: true,
         }),
-      ]),
-    ]).start();
-  }, []);
+      ]).start();
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [fadeAnim, slideAnim, delay]);
 
   return (
     <Animated.View
@@ -70,12 +71,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, icon, delay
 };
 
 const FeatureCard: React.FC<FeatureProps> = ({ icon, title, description, delay = 0 }) => {
-  const fadeAnim = new Animated.Value(0);
-  const slideAnim = new Animated.Value(30);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.delay(delay),
+    const timer = setTimeout(() => {
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -87,9 +87,11 @@ const FeatureCard: React.FC<FeatureProps> = ({ icon, title, description, delay =
           duration: 600,
           useNativeDriver: true,
         }),
-      ]),
-    ]).start();
-  }, []);
+      ]).start();
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [fadeAnim, slideAnim, delay]);
 
   return (
     <Animated.View
@@ -114,11 +116,11 @@ const FeatureCard: React.FC<FeatureProps> = ({ icon, title, description, delay =
 
 export default function AboutScreen() {
   const [animationStarted, setAnimationStarted] = useState(false);
-  const headerFadeAnim = new Animated.Value(0);
-  const headerSlideAnim = new Animated.Value(-50);
+  const headerFadeAnim = useRef(new Animated.Value(0)).current;
+  const headerSlideAnim = useRef(new Animated.Value(-50)).current;
 
   useEffect(() => {
-    // Start header animation
+    // Start header animation immediately
     Animated.parallel([
       Animated.timing(headerFadeAnim, {
         toValue: 1,
@@ -133,7 +135,7 @@ export default function AboutScreen() {
     ]).start(() => {
       setAnimationStarted(true);
     });
-  }, []);
+  }, [headerFadeAnim, headerSlideAnim]);
 
   const securityStats = [
     {
@@ -225,111 +227,113 @@ export default function AboutScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={theme.colors.background.primary} />
       
-      {/* Header Section */}
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            opacity: headerFadeAnim,
-            transform: [{ translateY: headerSlideAnim }],
-          },
-        ]}
-      >
-        <SafeVaultLogo size="large" showText={true} />
-        <Text style={styles.headerTitle}>Secure. Fast. Reliable.</Text>
-        <Text style={styles.headerSubtitle}>
-          The most trusted cryptocurrency wallet with enterprise-grade security
-        </Text>
-      </Animated.View>
-
-      {/* Security Statistics Grid */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Security Excellence</Text>
-        <View style={styles.statsGrid}>
-          {securityStats.map((stat, index) => (
-            <StatCard
-              key={index}
-              {...stat}
-              delay={animationStarted ? index * 100 : 0}
-            />
-          ))}
-        </View>
-      </View>
-
-      {/* Trust Indicators */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Trusted Worldwide</Text>
-        <View style={styles.trustGrid}>
-          {trustStats.map((stat, index) => (
-            <View key={index} style={styles.trustCard}>
-              <Text style={styles.trustValue}>{stat.value}</Text>
-              <Text style={styles.trustLabel}>{stat.label}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      {/* Features Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Why Choose SafeVault?</Text>
-        <View style={styles.featuresContainer}>
-          {features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              {...feature}
-              delay={animationStarted ? index * 80 : 0}
-            />
-          ))}
-        </View>
-      </View>
-
-      {/* Security Badges */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Security Certifications</Text>
-        <View style={styles.badgesContainer}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeIcon}>🏆</Text>
-            <Text style={styles.badgeText}>SOC 2 Certified</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeIcon}>🔐</Text>
-            <Text style={styles.badgeText}>ISO 27001</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeIcon}>✅</Text>
-            <Text style={styles.badgeText}>Audited by CertiK</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeIcon}>🛡️</Text>
-            <Text style={styles.badgeText}>Bug Bounty Program</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Contact Section */}
-      <View style={styles.section}>
-        <View style={styles.contactSection}>
-          <Text style={styles.contactTitle}>Need Help?</Text>
-          <Text style={styles.contactDescription}>
-            Our 24/7 support team is here to help you with any questions.
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {/* Header Section */}
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              opacity: headerFadeAnim,
+              transform: [{ translateY: headerSlideAnim }],
+            },
+          ]}
+        >
+          <SafeVaultLogo size="large" showText={true} />
+          <Text style={styles.headerTitle}>Secure. Fast. Reliable.</Text>
+          <Text style={styles.headerSubtitle}>
+            The most trusted cryptocurrency wallet with enterprise-grade security
           </Text>
-          <TouchableOpacity style={styles.contactButton}>
-            <Text style={styles.contactButtonText}>Contact Support</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        </Animated.View>
 
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>© 2024 SafeVault. All rights reserved.</Text>
-        <Text style={styles.footerSubtext}>
-          Making cryptocurrency safe and accessible for everyone
-        </Text>
-      </View>
-    </ScrollView>
+        {/* Security Statistics Grid */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Security Excellence</Text>
+          <View style={styles.statsGrid}>
+            {securityStats.map((stat, index) => (
+              <StatCard
+                key={index}
+                {...stat}
+                delay={animationStarted ? index * 100 : 0}
+              />
+            ))}
+          </View>
+        </View>
+
+        {/* Trust Indicators */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Trusted Worldwide</Text>
+          <View style={styles.trustGrid}>
+            {trustStats.map((stat, index) => (
+              <View key={index} style={styles.trustCard}>
+                <Text style={styles.trustValue}>{stat.value}</Text>
+                <Text style={styles.trustLabel}>{stat.label}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Features Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Why Choose SafeVault?</Text>
+          <View style={styles.featuresContainer}>
+            {features.map((feature, index) => (
+              <FeatureCard
+                key={index}
+                {...feature}
+                delay={animationStarted ? index * 80 : 0}
+              />
+            ))}
+          </View>
+        </View>
+
+        {/* Security Badges */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Security Certifications</Text>
+          <View style={styles.badgesContainer}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeIcon}>🏆</Text>
+              <Text style={styles.badgeText}>SOC 2 Certified</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeIcon}>🔐</Text>
+              <Text style={styles.badgeText}>ISO 27001</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeIcon}>✅</Text>
+              <Text style={styles.badgeText}>Audited by CertiK</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeIcon}>🛡️</Text>
+              <Text style={styles.badgeText}>Bug Bounty Program</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Contact Section */}
+        <View style={styles.section}>
+          <View style={styles.contactSection}>
+            <Text style={styles.contactTitle}>Need Help?</Text>
+            <Text style={styles.contactDescription}>
+              Our 24/7 support team is here to help you with any questions.
+            </Text>
+            <TouchableOpacity style={styles.contactButton}>
+              <Text style={styles.contactButtonText}>Contact Support</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>© 2024 SafeVault. All rights reserved.</Text>
+          <Text style={styles.footerSubtext}>
+            Making cryptocurrency safe and accessible for everyone
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -337,6 +341,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.primary,
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     alignItems: 'center',

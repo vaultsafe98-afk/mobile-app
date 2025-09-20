@@ -17,12 +17,16 @@ import { submitDepositRequest } from '../store/slices/transactionSlice';
 import { addNotification } from '../store/slices/notificationSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useFocusRefresh } from '../hooks/useFocusRefresh';
+import { apiService } from '../services/apiService';
 
 export default function DepositScreen() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const [amount, setAmount] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const [usdtWalletAddress, setUsdtWalletAddress] = useState('');
+  const [addressLoading, setAddressLoading] = useState(true);
+  const [addressError, setAddressError] = useState('');
 
   // Handle pull to refresh
   const onRefresh = async () => {
@@ -32,6 +36,11 @@ export default function DepositScreen() {
     clearImage();
     setRefreshing(false);
   };
+
+  // Load TRC address on component mount
+  useEffect(() => {
+    fetchTrcAddress();
+  }, []);
 
   // Refresh data when screen comes into focus (smart reset)
   useFocusRefresh({
@@ -52,12 +61,28 @@ export default function DepositScreen() {
     uploadProgress,
     pickImage,
     takePhoto,
-    uploadImage,
     clearImage,
   } = useImagePicker();
 
-  // Static USDT wallet address (as per requirements)
-  const usdtWalletAddress = 'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE';
+  // Fetch user's TRC address
+  const fetchTrcAddress = async () => {
+    try {
+      setAddressLoading(true);
+      setAddressError('');
+      const response = await apiService.getTrcAddress();
+      
+      if (response.success && response.data) {
+        setUsdtWalletAddress(response.data.trcAddress);
+      } else {
+        setAddressError(response.message || 'Failed to get TRC address');
+      }
+    } catch (error: any) {
+      console.error('Error fetching TRC address:', error);
+      setAddressError(error.message || 'Failed to get TRC address');
+    } finally {
+      setAddressLoading(false);
+    }
+  };
 
   const copyToClipboard = () => {
     Clipboard.setString(usdtWalletAddress);
@@ -93,29 +118,24 @@ export default function DepositScreen() {
     }
 
     try {
-      // Upload image to S3
-      const imageUrl = await uploadImage(user.id);
-      
-      if (imageUrl) {
-        // Submit deposit request to API
-        const result = await dispatch(submitDepositRequest({
-          amount: parseFloat(amount),
-          imageUri: imageUrl,
+      // Submit deposit request directly with image URI
+      const result = await dispatch(submitDepositRequest({
+        amount: parseFloat(amount),
+        imageUri: selectedImage,
+      }));
+
+      if (submitDepositRequest.fulfilled.match(result)) {
+        // Add notification
+        dispatch(addNotification({
+          message: 'Your deposit request has been submitted for review',
+          type: 'deposit',
         }));
 
-        if (submitDepositRequest.fulfilled.match(result)) {
-          // Add notification
-          dispatch(addNotification({
-            message: 'Your deposit request has been submitted for review',
-            type: 'deposit',
-          }));
-
-          Alert.alert('Success', 'Deposit request submitted successfully!');
-          clearImage();
-          setAmount('');
-        } else if (submitDepositRequest.rejected.match(result)) {
-          Alert.alert('Error', result.payload as string);
-        }
+        Alert.alert('Success', 'Deposit request submitted successfully!');
+        clearImage();
+        setAmount('');
+      } else if (submitDepositRequest.rejected.match(result)) {
+        Alert.alert('Error', result.payload as string);
       }
     } catch (error) {
       console.error('Error submitting deposit:', error);
@@ -145,15 +165,36 @@ export default function DepositScreen() {
         {/* Wallet Address Card */}
         <View style={styles.walletCard}>
           <Text style={styles.cardTitle}>USDT Wallet Address</Text>
-          <View style={styles.addressContainer}>
-            <Text style={styles.walletAddress}>{usdtWalletAddress}</Text>
-            <TouchableOpacity style={styles.copyButton} onPress={copyToClipboard}>
-              <Text style={styles.copyButtonText}>Copy</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.warningText}>
-            ⚠️ Only send USDT (TRC-20) to this address. Sending other cryptocurrencies may result in permanent loss.
-          </Text>
+          
+          {addressLoading ? (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner size="small" />
+              <Text style={styles.loadingText}>Loading your deposit address...</Text>
+            </View>
+          ) : addressError ? (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{addressError}</Text>
+              <TouchableOpacity style={styles.retryButton} onPress={fetchTrcAddress}>
+                <Text style={styles.retryButtonText}>Retry</Text>
+              </TouchableOpacity>
+            </View>
+          ) : usdtWalletAddress ? (
+            <>
+              <View style={styles.addressContainer}>
+                <Text style={styles.walletAddress}>{usdtWalletAddress}</Text>
+                <TouchableOpacity style={styles.copyButton} onPress={copyToClipboard}>
+                  <Text style={styles.copyButtonText}>Copy</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.warningText}>
+                ⚠️ Only send USDT (TRC-20) to this address. Sending other cryptocurrencies may result in permanent loss.
+              </Text>
+            </>
+          ) : (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>No deposit address available</Text>
+            </View>
+          )}
         </View>
 
         {/* Instructions */}
@@ -507,5 +548,35 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: theme.typography.fontSize.sm,
     color: theme.colors.text.secondary,
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
+  },
+  loadingText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
+    marginTop: theme.spacing.sm,
+  },
+  errorContainer: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
+  },
+  errorText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.status.error,
+    textAlign: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  retryButton: {
+    backgroundColor: theme.colors.neon.green,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.background.primary,
   },
 });

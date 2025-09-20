@@ -53,8 +53,23 @@ export default function RegisterScreen({ navigation }: any) {
       const result = await dispatch(registerUser({ firstName, lastName, email, password }));
       
       if (registerUser.fulfilled.match(result)) {
-        Alert.alert('Success', 'Account created successfully!');
-        // Navigation will be handled by the app's authentication flow
+        const response = result.payload as any;
+        
+        if (response.requiresApproval) {
+          Alert.alert(
+            'Registration Successful',
+            'Your account has been created and is under review. You will be notified once an admin approves your account.',
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('Login')
+              }
+            ]
+          );
+        } else {
+          Alert.alert('Success', 'Account created successfully!');
+          // Navigation will be handled by the app's authentication flow
+        }
       } else if (registerUser.rejected.match(result)) {
         Alert.alert('Error', result.payload as string);
       }

@@ -78,7 +78,6 @@ export default function NotificationsScreen() {
 
   const handleMarkAsRead = async (notificationId: string) => {
     try {
-      console.log('Marking notification as read - ID:', notificationId, 'Length:', notificationId?.length);
       const response = await apiService.markNotificationAsRead(notificationId);
       if (response.success) {
         dispatch(markNotificationAsRead(notificationId));
@@ -147,14 +146,21 @@ export default function NotificationsScreen() {
     }
   };
 
-  const renderNotificationItem = ({ item }: { item: Notification }) => (
-    <TouchableOpacity
-      style={[
-        styles.notificationItem,
-        item.status === 'unread' && styles.unreadNotification
-      ]}
-      onPress={() => handleMarkAsRead(item.id)}
-    >
+  const renderNotificationItem = ({ item }: { item: Notification }) => {
+    // Safety check for undefined _id
+    if (!item._id) {
+      console.warn('Notification with undefined _id:', item);
+      return null;
+    }
+    
+    return (
+      <TouchableOpacity
+        style={[
+          styles.notificationItem,
+          item.status === 'unread' && styles.unreadNotification
+        ]}
+        onPress={() => handleMarkAsRead(item._id)}
+      >
       <View style={styles.notificationContent}>
         <View style={styles.notificationHeader}>
           <View style={styles.notificationIconContainer}>
@@ -174,7 +180,8 @@ export default function NotificationsScreen() {
         </View>
       </View>
     </TouchableOpacity>
-  );
+    );
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
@@ -202,7 +209,7 @@ export default function NotificationsScreen() {
       <FlatList
         data={notifications}
         renderItem={renderNotificationItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => item._id || `notification-${index}`}
         ListEmptyComponent={renderEmptyState}
         refreshControl={
           <RefreshControl

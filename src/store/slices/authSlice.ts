@@ -124,6 +124,12 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    handleBlockedUser: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.isLoading = false;
+      state.error = 'ACCOUNT_BLOCKED: Your account has been blocked. Please contact support for more information.';
+    },
   },
   extraReducers: (builder) => {
     // Register user
@@ -134,8 +140,17 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
+        const response = action.payload as any;
+        
+        // Only set authenticated if token is provided (account approved)
+        if (response.token) {
+          state.isAuthenticated = true;
+          state.user = response.user;
+        } else {
+          // For pending accounts, don't set as authenticated
+          state.isAuthenticated = false;
+          state.user = null;
+        }
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -180,7 +195,14 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = action.payload as string;
+        const errorMessage = action.payload as string;
+        
+        // Check if user is blocked
+        if (errorMessage?.includes('blocked')) {
+          state.error = 'ACCOUNT_BLOCKED: Your account has been blocked. Please contact support for more information.';
+        } else {
+          state.error = errorMessage;
+        }
       });
 
     // Logout user
@@ -221,6 +243,7 @@ export const {
   updateProfile,
   clearError,
   clearAuth,
+  handleBlockedUser,
 } = authSlice.actions;
 
 export default authSlice.reducer;

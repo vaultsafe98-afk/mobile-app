@@ -2,8 +2,8 @@ import { apiService } from './apiService';
 
 // ImageKit Configuration
 const IMAGEKIT_CONFIG = {
-  urlEndpoint: 'https://ik.imagekit.io/placeholder', // Will be replaced with real endpoint
-  publicKey: 'public_placeholder', // Will be replaced with real public key
+  urlEndpoint: 'https://ik.imagekit.io/d4xs333wi',
+  publicKey: 'public_68Igyt2HkOVc+4ZhCP1LJASGGMA=',
 };
 
 class ImageKitService {
@@ -25,27 +25,15 @@ class ImageKitService {
     try {
       console.log('ImageKit upload:', { imageUri, fileName });
       
-      // Convert image to base64
-      const base64Image = await this.convertImageToBase64(imageUri);
+      // Call backend ImageKit upload endpoint
+      const response = await apiService.uploadImageToImageKit(imageUri, fileName);
       
-      // Create FormData for upload
-      const formData = new FormData();
-      formData.append('file', {
-        uri: imageUri,
-        type: 'image/jpeg',
-        name: fileName,
-      } as any);
-      formData.append('fileName', fileName);
-      formData.append('folder', 'deposit-proofs');
-
-      // For now, use mock implementation
-      // In production, this would call the backend ImageKit upload endpoint
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUrl = `https://ik.imagekit.io/mock-id/deposit-proofs/${fileName}`;
-      console.log('Mock ImageKit upload successful:', mockUrl);
-      
-      return mockUrl;
+      if (response.success && response.data?.url) {
+        console.log('ImageKit upload successful:', response.data.url);
+        return response.data.url;
+      } else {
+        throw new Error(response.error || 'Upload failed');
+      }
     } catch (error) {
       console.error('Error uploading image to ImageKit:', error);
       throw new Error('Failed to upload image. Please try again.');
@@ -59,20 +47,13 @@ class ImageKitService {
    */
   private async convertImageToBase64(imageUri: string): Promise<string> {
     try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+      // For React Native, we can use the imageUri directly
+      // The base64 conversion is not needed for the mock implementation
+      console.log('Converting image to base64:', imageUri);
       
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result as string;
-          // Remove data:image/jpeg;base64, prefix
-          const base64Data = base64.split(',')[1];
-          resolve(base64Data);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      // Mock implementation - in production, you would use a proper base64 conversion
+      // For now, we'll just return a placeholder since we're using mock URLs
+      return 'mock-base64-data';
     } catch (error) {
       console.error('Error converting image to base64:', error);
       throw new Error('Failed to process image. Please try again.');

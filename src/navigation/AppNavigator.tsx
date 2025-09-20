@@ -1,15 +1,17 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useAppSelector } from '../hooks/redux';
+import { useAppSelector, useAppDispatch } from '../hooks/redux';
+import { handleBlockedUser } from '../store/slices/authSlice';
 
 // Import screens
 import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
+import BlockedUserScreen from '../screens/BlockedUserScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SecurityScreen from '../screens/SecurityScreen';
@@ -150,7 +152,8 @@ function MainStack() {
 // Main App Navigator
 export default function AppNavigator() {
   const [isLoading, setIsLoading] = React.useState(true);
-  const { isAuthenticated } = useAppSelector(state => state.auth);
+  const { isAuthenticated, user, error } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     // Simulate splash screen delay
@@ -161,13 +164,41 @@ export default function AppNavigator() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Check for blocked user on app startup
+  React.useEffect(() => {
+    if (user && user.status === 'blocked') {
+      dispatch(handleBlockedUser());
+      Alert.alert(
+        'Account Blocked',
+        'Your account has been blocked. Please contact support for more information.',
+        [{ text: 'OK' }]
+      );
+    }
+  }, [user, dispatch]);
+
+  // Show blocked user error if present
+  React.useEffect(() => {
+    if (error && error.includes('ACCOUNT_BLOCKED')) {
+      Alert.alert(
+        'Account Blocked',
+        'Your account has been blocked. Please contact support for more information.',
+        [{ text: 'OK' }]
+      );
+    }
+  }, [error]);
+
   if (isLoading) {
     return <SplashScreen />;
   }
 
+  // Check if user is blocked
+  const isBlocked = user?.status === 'blocked' || error?.includes('ACCOUNT_BLOCKED');
+
   return (
     <NavigationContainer>
-      {isAuthenticated ? (
+      {isBlocked ? (
+        <BlockedUserScreen />
+      ) : isAuthenticated ? (
         <>
           <MainStack />
           <NotificationBanner />

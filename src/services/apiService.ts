@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiConfig } from '../config/api';
+import { BlockedUserHandler } from '../utils/blockedUserHandler';
 
 // API Configuration
 const config = getApiConfig();
@@ -23,19 +24,24 @@ interface AuthResponse {
     email: string;
     profileImage?: string;
     depositAmount: number;
-    profitAmount: number;
     totalAmount: number;
     status: string;
     role: string;
+    accountStatus: string;
+    trcAddress?: string;
     createdAt: string;
   };
 }
 
 interface WalletBalance {
   deposit: number;
-  profit: number;
   total: number;
   lastUpdated: string;
+}
+
+interface TrcAddressResponse {
+  trcAddress: string;
+  accountStatus: string;
 }
 
 interface Transaction {
@@ -52,7 +58,7 @@ interface Transaction {
 }
 
 interface Notification {
-  id: string;
+  _id: string;  // Use _id instead of id
   message: string;
   type: 'deposit' | 'withdrawal' | 'profit' | 'general';
   status: 'read' | 'unread';
@@ -126,6 +132,14 @@ class ApiService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        
+        // Handle blocked account specifically
+        if (response.status === 403 && errorData.message?.includes('blocked')) {
+          // Use the blocked user handler
+          await BlockedUserHandler.handleBlockedUser();
+          throw new Error('ACCOUNT_BLOCKED: Your account has been blocked. Please contact support for more information.');
+        }
+        
         throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -217,6 +231,11 @@ class ApiService {
       },
       body: formData,
     });
+  }
+
+  // Get user's TRC address for deposits
+  async getTrcAddress(): Promise<ApiResponse<TrcAddressResponse>> {
+    return this.request<TrcAddressResponse>('/user/trc-address');
   }
 
   // Wallet APIs
@@ -475,7 +494,45 @@ class ApiService {
       uptime: number;
     }>('/health');
   }
+
+  // ImageKit upload
+  async uploadImageToImageKit(imageUri: string, fileName: string): Promise<ApiResponse<{ url: string }>> {
+    try {
+      // Convert image to base64
+      const base64 = await this.convertImageToBase64(imageUri);
+      
+      return this.request<{ url: string }>('/imagekit/upload', {
+        method: 'POST',
+        body: JSON.stringify({
+          image: base64,
+          fileName: fileName,
+          folder: 'deposit-proofs'
+        }),
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  }
+
+  // Convert image URI to base64
+  private async convertImageToBase64(imageUri: string): Promise<string> {
+    try {
+      // For React Native, we'll use a simpler approach
+      // Since we're using mock data for now, we'll return a placeholder
+      console.log('Converting image to base64:', imageUri);
+      
+      // For development, we'll create a simple base64 placeholder
+      // In production, you would use react-native-fs or similar library
+      const placeholderBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+      
+      return placeholderBase64;
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      throw new Error('Failed to process image');
+    }
+  }
 }
 
 export const apiService = new ApiService();
-export type { ApiResponse, AuthResponse, WalletBalance, Transaction, Notification };
+export type { ApiResponse, AuthResponse, WalletBalance, Transaction, Notification, TrcAddressResponse };

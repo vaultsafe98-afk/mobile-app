@@ -34,7 +34,30 @@ export default function LoginScreen({ navigation }: any) {
         // Navigation will be handled by the app's authentication flow
         // No need to show success alert, user will see they're logged in
       } else if (loginUser.rejected.match(result)) {
-        Alert.alert('Error', result.payload as string);
+        const errorMessage = result.payload as string;
+        
+        // Handle specific account status messages
+        if (errorMessage.includes('under review')) {
+          Alert.alert(
+            'Account Under Review',
+            'Your account is currently under review. Please wait for admin approval before you can access your account. You will be notified once your account is approved.',
+            [{ text: 'OK' }]
+          );
+        } else if (errorMessage.includes('rejected')) {
+          Alert.alert(
+            'Account Rejected',
+            'Your account has been rejected. Please contact support for more information.',
+            [{ text: 'OK' }]
+          );
+        } else if (errorMessage.includes('blocked')) {
+          Alert.alert(
+            'Account Blocked',
+            'Your account has been blocked. Please contact support for more information.',
+            [{ text: 'OK' }]
+          );
+        } else {
+          Alert.alert('Error', errorMessage);
+        }
       }
     } catch (error) {
       Alert.alert('Error', 'An unexpected error occurred');

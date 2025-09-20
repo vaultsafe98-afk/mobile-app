@@ -18,7 +18,7 @@ export const API_CONFIG = {
 
 // Environment-specific configurations
 export const getApiConfig = () => {
-  // Use deployed backend for both development and production
+  // Use deployed backend for production
   return {
     ...API_CONFIG,
     BASE_URL: 'https://backend-5f5u.onrender.com/api',

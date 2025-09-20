@@ -41,7 +41,7 @@ export default function NotificationBanner({ onPress }: NotificationBannerProps)
         }),
       ]).start();
 
-      // Auto hide after 5 seconds
+      // Auto hide after 5 seconds (without marking as read)
       const timer = setTimeout(() => {
         hideNotification();
       }, 5000);
@@ -62,16 +62,12 @@ export default function NotificationBanner({ onPress }: NotificationBannerProps)
         duration: 300,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      if (latestNotification) {
-        dispatch(markNotificationAsRead(latestNotification.id));
-      }
-    });
+    ]).start();
   };
 
   const handlePress = () => {
     if (latestNotification) {
-      dispatch(markNotificationAsRead(latestNotification.id));
+      dispatch(markNotificationAsRead(latestNotification._id));
       onPress?.();
     }
   };

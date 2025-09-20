@@ -3,7 +3,7 @@ import { apiService, Notification } from '../../services/apiService';
 import { generateObjectId } from '../../utils/objectId';
 
 export interface Notification {
-  id: string;
+  _id: string;  // Use _id instead of id
   message: string;
   type: 'deposit' | 'withdrawal' | 'profit' | 'general';
   status: 'unread' | 'read';
@@ -112,12 +112,12 @@ const notificationSlice = createSlice({
       state.unreadCount += 1;
     },
     removeNotification: (state, action: PayloadAction<string>) => {
-      const notification = state.notifications.find(n => n.id === action.payload);
+      const notification = state.notifications.find(n => n._id === action.payload);
       if (notification) {
         if (notification.status === 'unread') {
           state.unreadCount -= 1;
         }
-        state.notifications = state.notifications.filter(n => n.id !== action.payload);
+        state.notifications = state.notifications.filter(n => n._id !== action.payload);
       }
     },
     clearAllNotifications: (state) => {
@@ -166,7 +166,7 @@ const notificationSlice = createSlice({
       })
       .addCase(markNotificationAsRead.fulfilled, (state, action) => {
         state.isLoading = false;
-        const notification = state.notifications.find(n => n.id === action.payload);
+        const notification = state.notifications.find(n => n._id === action.payload);
         if (notification && notification.status === 'unread') {
           notification.status = 'read';
           state.unreadCount -= 1;
